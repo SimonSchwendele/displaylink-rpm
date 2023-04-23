@@ -1,5 +1,5 @@
-%{!?_daemon_version:%global _daemon_version 5.6.1-59.184}
-%{!?_version:%global _version 1.12.0}
+%{!?_daemon_version:%global _daemon_version 5.7.0-61.129}
+%{!?_version:%global _version 1.13.1}
 %{!?_release:%global _release 2}
 
 # Disable RPATH since DisplayLinkManager contains this.
@@ -36,9 +36,6 @@ Source6:  95-displaylink.preset
 Source7:  %{name}.logrotate
 Source8:  displaylink-udev-extractor.sh
 Source9:  evdi.conf
-
-Patch0:   evdi-el-fixes.diff
-Patch1:   evdi-bundled-devel-patches.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  libdrm-devel
@@ -85,12 +82,10 @@ mkdir -p evdi-%{version}
 mv displaylink-driver-%{_daemon_version}/evdi.tar.gz evdi-%{version}
 cd evdi-%{version}
 gzip -dc evdi.tar.gz | tar -xvvf -
-%patch1 -p1
 
 %else
 %setup -q -T -D -a 0
 cd evdi-%{version}
-%patch0 -p1
 %endif
 
 sed -i 's/\r//' README.md
