@@ -1,4 +1,4 @@
-name: Create Release Assets
+name: Upload Releases to github and COPR
 
 on:
   release:
@@ -79,3 +79,16 @@ jobs:
           update_latest_release: true
           tags: true
           overwrite: true
+
+      - name: Install copr-cli
+        if: matrix.version > 37
+        run: dnf install copr-cli -y
+        
+      - name: Add login to copr
+        if: matrix.version > 37
+        run: |
+          echo "${{ secrets.COPR_CREDENTIALS }}" >> "./coprConfig"
+      
+      - name: Upload to COPR
+        if: matrix.version > 37
+        run: copr-cli --config "./coprConfig" build Displaylink ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.src.rpm
