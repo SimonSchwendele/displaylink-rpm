@@ -1,6 +1,6 @@
-%{!?_daemon_version:%global _daemon_version 5.7.0-61.129}
-%{!?_version:%global _version 1.13.1}
-%{!?_release:%global _release 2}
+%{!?_daemon_version:%global _daemon_version 5.8.0-63.33}
+%{!?_version:%global _version 1.14.1}
+%{!?_release:%global _release 1}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -19,7 +19,7 @@
 Name:     displaylink
 Version:  %{_version}
 Release:  %{_release}%{?_github_release}
-Summary:  DisplayLink VGA/HDMI driver for DL-6xxx, DL-5xxx, DL-41xx and DL-3xxx adapters
+Summary:  DisplayLink VGA/HDMI driver for DL-7xxx, DL-6xxx, DL-5xxx, DL-41xx and DL-3xxx adapters
 
 License:  GPLv2 and LGPLv2 and MIT and ASL 2.0 and Proprietary
 
@@ -36,8 +36,6 @@ Source6:  95-displaylink.preset
 Source7:  %{name}.logrotate
 Source8:  displaylink-udev-extractor.sh
 Source9:  evdi.conf
-
-Patch0:   evdi-el-fixes-1.13.1.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  libdrm-devel
@@ -84,12 +82,10 @@ mkdir -p evdi-%{version}
 mv displaylink-driver-%{_daemon_version}/evdi.tar.gz evdi-%{version}
 cd evdi-%{version}
 gzip -dc evdi.tar.gz | tar -xvvf -
-%patch -P0 -p1
 
 %else
 %setup -q -T -D -a 0
 cd evdi-%{version}
-%patch -P0 -p1
 %endif
 
 sed -i 's/\r//' README.md

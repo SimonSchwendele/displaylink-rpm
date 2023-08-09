@@ -14,47 +14,11 @@ jobs:
       matrix:
         include:
         - os: fedora
-          version: 30
-          dockernamespace: fedora
-        - os: fedora
-          version: 31
-          dockernamespace: fedora
-        - os: fedora
-          version: 32
-          dockernamespace: fedora
-        - os: fedora
-          version: 33
-          dockernamespace: fedora
-        - os: fedora
-          version: 34
-          dockernamespace: fedora
-        - os: fedora
-          version: 35
-          dockernamespace: fedora
-        - os: fedora
-          version: 36
-          dockernamespace: fedora
-        - os: fedora
           version: 37
           dockernamespace: fedora
         - os: fedora
           version: 38
           dockernamespace: fedora
-        - os: centos
-          version: 7.9.2009
-          dockernamespace: centos
-        - os: centos-stream
-          version: stream8
-          dockernamespace: quay.io/centos/centos
-        - os: centos-stream
-          version: stream9
-          dockernamespace: quay.io/centos/centos
-        - os: rocky
-          version: 8
-          dockernamespace: rockylinux
-        - os: rocky
-          version: 9
-          dockernamespace: rockylinux
 
     steps:
       - uses: actions/checkout@v3
@@ -78,13 +42,8 @@ jobs:
       - name: Environment variable for OS version
         run: |
           echo "OSVERSION=${{ matrix.version }}" >> $GITHUB_ENV
-     
-      - name: Run CI
-        if: matrix.version < 37 || startsWith(matrix.os, 'centos')
-        run: ci/${{ matrix.os }}.sh
 
       - name: Run CI (Fedora 37+)
-        if: matrix.os == 'fedora' && matrix.version > 36
         run: ci/${{ matrix.os }}37plus.sh
 
       - name: Run build
@@ -113,3 +72,17 @@ jobs:
           update_latest_release: true
           tags: true
           overwrite: true
+
+      - name: Install copr-cli
+        if: matrix.version > 37
+        run: dnf install copr-cli -y
+        
+      - name: Add login to copr
+        if: matrix.version > 37
+        run: |
+          echo "${{ secrets.COPR_CREDENTIALS }}" >> "./coprConfig"
+      
+      - name: Upload to COPR
+        if: matrix.version > 37
+        run: copr-cli --config "./coprConfig" build Displaylink ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.src.rpm
+
