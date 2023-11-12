@@ -1,6 +1,6 @@
 %{!?_daemon_version:%global _daemon_version 5.8.0-63.33}
 %{!?_version:%global _version 1.14.1}
-%{!?_release:%global _release 2}
+%{!?_release:%global _release 3}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -36,6 +36,8 @@ Source6:  95-displaylink.preset
 Source7:  %{name}.logrotate
 Source8:  displaylink-udev-extractor.sh
 Source9:  evdi.conf
+
+Patch0: evdiFix660.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  libdrm-devel
@@ -82,10 +84,12 @@ mkdir -p evdi-%{version}
 mv displaylink-driver-%{_daemon_version}/evdi.tar.gz evdi-%{version}
 cd evdi-%{version}
 gzip -dc evdi.tar.gz | tar -xvvf -
+%patch -P0 -p1
 
 %else
 %setup -q -T -D -a 0
 cd evdi-%{version}
+%patch -P0 -p1
 %endif
 
 sed -i 's/\r//' README.md
