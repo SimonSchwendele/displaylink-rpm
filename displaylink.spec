@@ -1,6 +1,6 @@
 %{!?_daemon_version:%global _daemon_version 5.8.0-63.33}
 %{!?_version:%global _version 1.14.1}
-%{!?_release:%global _release 2}
+%{!?_release:%global _release 4}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -263,7 +263,7 @@ done
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
-* Tue Jan 23 2024 Crashdummy <crashdummy13377@proton.me> 1.14.1-3
+* Tue Jan 23 2024 Crashdummy <crashdummy13377@proton.me> 1.14.1-4
 - Add patch for evdi to compile against 6.8.0-rc1
 
 * Sat Dec 23 2023 Michael L. Young <elgueromexicano@gmail.com> 1.14.1-2
