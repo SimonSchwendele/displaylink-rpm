@@ -1,0 +1,62 @@
+diff --git a/module/evdi_debug.c b/module/evdi_debug.c
+index 56f29b6..0f941d3 100644
+--- a/module/evdi_debug.c
++++ b/module/evdi_debug.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/sched.h>
++#include <linux/proc_fs.h>
+ 
+ #include "evdi_debug.h"
+ 
+diff --git a/module/evdi_drm_drv.c b/module/evdi_drm_drv.c
+index c0f59c9..b21c705 100644
+--- a/module/evdi_drm_drv.c
++++ b/module/evdi_drm_drv.c
+@@ -37,16 +37,20 @@
+ static struct drm_driver driver;
+ 
+ struct drm_ioctl_desc evdi_painter_ioctls[] = {
+-	DRM_IOCTL_DEF_DRV(EVDI_CONNECT, evdi_painter_connect_ioctl,
+-			  DRM_UNLOCKED),
+-	DRM_IOCTL_DEF_DRV(EVDI_REQUEST_UPDATE,
+-			  evdi_painter_request_update_ioctl, DRM_UNLOCKED),
+-	DRM_IOCTL_DEF_DRV(EVDI_GRABPIX, evdi_painter_grabpix_ioctl,
+-			  DRM_UNLOCKED),
+-	DRM_IOCTL_DEF_DRV(EVDI_DDCCI_RESPONSE, evdi_painter_ddcci_response_ioctl,
+-			  DRM_UNLOCKED),
+-	DRM_IOCTL_DEF_DRV(EVDI_ENABLE_CURSOR_EVENTS, evdi_painter_enable_cursor_events_ioctl,
+-			  DRM_UNLOCKED),
++
++#if KERNEL_VERSION(6, 8, 0) <= LINUX_VERSION_CODE || defined(EL8)
++	DRM_IOCTL_DEF_DRV(EVDI_CONNECT, evdi_painter_connect_ioctl, 0),
++	DRM_IOCTL_DEF_DRV(EVDI_REQUEST_UPDATE, evdi_painter_request_update_ioctl, 0),
++	DRM_IOCTL_DEF_DRV(EVDI_GRABPIX, evdi_painter_grabpix_ioctl, 0),
++	DRM_IOCTL_DEF_DRV(EVDI_DDCCI_RESPONSE, evdi_painter_ddcci_response_ioctl, 0),
++	DRM_IOCTL_DEF_DRV(EVDI_ENABLE_CURSOR_EVENTS, evdi_painter_enable_cursor_events_ioctl, 0),
++#else
++	DRM_IOCTL_DEF_DRV(EVDI_CONNECT, evdi_painter_connect_ioctl, DRM_UNLOCKED),
++	DRM_IOCTL_DEF_DRV(EVDI_REQUEST_UPDATE, evdi_painter_request_update_ioctl, DRM_UNLOCKED),
++	DRM_IOCTL_DEF_DRV(EVDI_GRABPIX, evdi_painter_grabpix_ioctl, DRM_UNLOCKED),
++	DRM_IOCTL_DEF_DRV(EVDI_DDCCI_RESPONSE, evdi_painter_ddcci_response_ioctl, DRM_UNLOCKED),
++	DRM_IOCTL_DEF_DRV(EVDI_ENABLE_CURSOR_EVENTS, evdi_painter_enable_cursor_events_ioctl, DRM_UNLOCKED),
++#endif
+ };
+ 
+ #if KERNEL_VERSION(5, 11, 0) <= LINUX_VERSION_CODE || defined(EL8)
+diff --git a/module/evdi_i2c.c b/module/evdi_i2c.c
+index 3da656e..5e7f7e0 100644
+--- a/module/evdi_i2c.c
++++ b/module/evdi_i2c.c
+@@ -40,7 +40,10 @@ int evdi_i2c_add(struct i2c_adapter *adapter, struct device *parent,
+ 	void *ddev)
+ {
+ 	adapter->owner  = THIS_MODULE;
++#if KERNEL_VERSION(6, 8, 0) <= LINUX_VERSION_CODE || defined(EL8)
++#else
+ 	adapter->class  = I2C_CLASS_DDC;
++#endif
+ 	adapter->algo   = &dli2c_algorithm;
+ 	strscpy(adapter->name, "DisplayLink I2C Adapter", sizeof(adapter->name));
+ 	adapter->dev.parent = parent;

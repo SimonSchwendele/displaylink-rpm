@@ -39,6 +39,7 @@ Source9:  evdi.conf
 
 Patch0: 0001-Resolve-compiler-errors-when-compiling-against-Linux.patch
 Patch1: 0002-Adjusting-compile-to-account-for-newer-EL-8-and-EL-9.patch
+Patch2: 0003-Compile-against-6-8-0-rc.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  libdrm-devel
@@ -87,12 +88,14 @@ cd evdi-%{version}
 gzip -dc evdi.tar.gz | tar -xvvf -
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %else
 %setup -q -T -D -a 0
 cd evdi-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %endif
 
 sed -i 's/\r//' README.md
@@ -260,6 +263,9 @@ done
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+* Tue Jan 23 2024 Crashdummy <crashdummy13377@proton.me> 1.14.1-3
+- Add patch for evdi to compile against 6.8.0-rc1
+
 * Sat Dec 23 2023 Michael L. Young <elgueromexicano@gmail.com> 1.14.1-2
 - Add patch from upstream for newer kernels
 - Add patch from upstream for newer EL8 and EL9 kernels.
