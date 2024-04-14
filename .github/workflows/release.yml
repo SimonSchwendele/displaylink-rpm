@@ -44,7 +44,7 @@ jobs:
           echo "OSVERSION=${{ matrix.version }}" >> $GITHUB_ENV
 
       - name: Run CI
-        run: ci/${{ matrix.os }}37plus.sh
+        run: ci/${{ matrix.os }}.sh
 
       - name: Rename files
         run : ls -la
