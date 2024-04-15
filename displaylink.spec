@@ -23,9 +23,7 @@ Summary:  DisplayLink VGA/HDMI driver for DL-6xxx, DL-5xxx, DL-41xx and DL-3xxx 
 
 License:  GPLv2 and LGPLv2 and MIT and ASL 2.0 and Proprietary
 
-%if 0%{?_github}
 Source0:  https://github.com/DisplayLink/evdi/archive/v%{version}.tar.gz
-%endif
 Source1:  displaylink-driver.service
 Source2:  99-displaylink.rules
 Source3:  displaylink-sleep-extractor.sh
@@ -81,18 +79,8 @@ chmod +x displaylink-driver-%{_daemon_version}.run
 
 mkdir -p evdi-%{version}
 
-%if 0%{!?_github:1}
-mv displaylink-driver-%{_daemon_version}/evdi.tar.gz evdi-%{version}
-cd evdi-%{version}
-gzip -dc evdi.tar.gz | tar -xvvf -
-%patch0 -p1
-%patch1 -p1
-
-%else
 %setup -q -T -D -a 0
 cd evdi-%{version}
-%endif
-
 sed -i 's/\r//' README.md
 
 %build
