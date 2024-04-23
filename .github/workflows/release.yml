@@ -19,6 +19,10 @@ jobs:
         - os: fedora
           version: 41
           dockernamespace: quay.io/fedora/fedora
+        - os: fedora
+          version: 40
+          dockernamespace: quay.io/fedora/fedora
+
 
     steps:
       - uses: actions/checkout@v4
@@ -64,14 +68,14 @@ jobs:
           overwrite: true
 
       - name: Install copr-cli
-        if: matrix.version > 38
+        if: matrix.version > 39
         run: dnf install copr-cli -y
 
       - name: Add login to copr
-        if: matrix.version > 38
+        if: matrix.version > 39
         run: |
           echo "${{ secrets.COPR_CREDENTIALS }}" >> "./coprConfig"
 
       - name: Upload to COPR
-        if: matrix.version > 38
+        if: matrix.version > 39
         run: copr-cli --config "./coprConfig" build Displaylink ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.src.rpm
