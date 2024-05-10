@@ -1,6 +1,6 @@
-%{!?_daemon_version:%global _daemon_version 5.8.0-63.33}
+%{!?_daemon_version:%global _daemon_version 6.0.0-24}
 %{!?_version:%global _version 1.14.4}
-%{!?_release:%global _release 1}
+%{!?_release:%global _release 2}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -34,9 +34,6 @@ Source6:  95-displaylink.preset
 Source7:  %{name}.logrotate
 Source8:  displaylink-udev-extractor.sh
 Source9:  evdi.conf
-
-Patch0: 0001-Resolve-compiler-errors-when-compiling-against-Linux.patch
-Patch1: 0002-Adjusting-compile-to-account-for-newer-EL-8-and-EL-9.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  libdrm-devel
@@ -74,7 +71,7 @@ docking stations, USB monitors, and USB adapters.
 
 %setup -q -T -D -a 4
 chmod +x displaylink-driver-%{_daemon_version}.run
-./displaylink-driver-%{_daemon_version}.run --noexec --keep
+./displaylink-driver-%{_daemon_version}.run --noexec --keep --target displaylink-driver-%{_daemon_version}
 # This creates a displaylink-driver-$version subdirectory
 
 mkdir -p evdi-%{version}
