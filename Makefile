@@ -77,7 +77,7 @@ github-release: $(TARGETS_GITHUB_EVDI)
 
 rpm: $(x86_64_RPM)
 
-srpm: $(SRPM_GITHUB_EVDI)
+srpm: $(x86_64_RPM)
 
 rpm-github: $(x86_64_RPM_GITHUB_EVDI)
 
