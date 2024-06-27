@@ -1,6 +1,6 @@
 %{!?_daemon_version:%global _daemon_version 6.0.0-24}
-%{!?_version:%global _version 1.14.4}
-%{!?_release:%global _release 2}
+%{!?_version:%global _version 1.14.5}
+%{!?_release:%global _release 1}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -84,6 +84,8 @@ gzip -dc evdi.tar.gz | tar -xvvf -
 %else
 %setup -q -T -D -a 0
 cd evdi-%{version}
+%endif
+
 sed -i 's/\r//' README.md
 
 %build
@@ -200,6 +202,9 @@ done
 %{_prefix}/src/evdi-%{version}/evdi_platform_drv.h
 %{_prefix}/src/evdi-%{version}/evdi_sysfs.c
 %{_prefix}/src/evdi-%{version}/evdi_sysfs.h
+
+# Exclude the tests directory
+%exclude %{_prefix}/src/evdi-%{version}/tests/
 
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/DisplayLinkManager

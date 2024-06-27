@@ -1,10 +1,11 @@
 #
 # Versions
 #
+
 DAEMON_VERSION := 6.0.0-24
 DOWNLOAD_ID    := 6511    # This id number comes off the link on the displaylink website
-VERSION        := 1.14.4
-RELEASE        := 2
+VERSION        := 1.14.5
+RELEASE        := 1
 
 #
 # Dependencies
@@ -79,6 +80,8 @@ rpm: $(x86_64_RPM)
 srpm: $(SRPM_GITHUB_EVDI)
 
 rpm-github: $(x86_64_RPM_GITHUB_EVDI)
+
+srpm-github: $(SRPM_GITHUB_EVDI)
 
 # Pull latest code from main branch
 devel: main
