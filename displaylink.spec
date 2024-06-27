@@ -82,15 +82,8 @@ chmod +x displaylink-driver-%{_daemon_version}.run
 
 mkdir -p evdi-%{version}
 
-%if 0%{!?_github:1}
-mv displaylink-driver-%{_daemon_version}/evdi.tar.gz evdi-%{version}
-cd evdi-%{version}
-gzip -dc evdi.tar.gz | tar -xvvf -
-
-%else
 %setup -q -T -D -a 0
 cd evdi-%{version}
-%endif
 
 sed -i 's/\r//' README.md
 
