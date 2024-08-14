@@ -1,5 +1,5 @@
 %{!?_daemon_version:%global _daemon_version 6.0.0-24}
-%{!?_version:%global _version 1.14.5}
+%{!?_version:%global _version 1.14.6}
 %{!?_release:%global _release 1}
 
 # Disable RPATH since DisplayLinkManager contains this.
@@ -219,6 +219,9 @@ done
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+* Wed Aug 14 2024 Crashdummy <crashdummy1337@proton.me> 1.14.6-1
+- Bump evdi to 1.14.6 to support Kernels 6.10.4 and 6.11 RCs
+
 * Thu May 16 2024 Michael L. Young <elgueromexicano@gmail.com> 1.14.4-2
 - Remove support for CentOS 7 which never really worked and it is EOL at end of June
 - Remove checks for i386 since we are only building x86_64
