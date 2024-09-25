@@ -1,17 +1,15 @@
 #
 # Versions
 #
-
-DAEMON_VERSION := 6.0.0-24
-DOWNLOAD_ID    := 6511    # This id number comes off the link on the displaylink website
-VERSION        := 1.14.6
+DAEMON_VERSION := 5.8.0-63.33
+DOWNLOAD_ID    := 5591    # This id number comes off the link on the displaylink website
+VERSION        := 1.14.4
 RELEASE        := 1
 
 #
 # Dependencies
 #
 
-ARCH := $(shell uname -m)
 DAEMON_PKG := DisplayLink_USB_Graphics_Software_for_Ubuntu_$(DAEMON_VERSION).zip
 EVDI_PKG   := v$(VERSION).tar.gz
 SPEC_FILE  := displaylink.spec
@@ -30,17 +28,17 @@ BUILD_DEPS_GITHUB_EVDI := $(DAEMON_PKG) $(EVDI_PKG) $(SPEC_FILE)
 # Targets
 #
 
-RPM := $(ARCH)/displaylink-$(VERSION)-$(RELEASE).$(ARCH).rpm
+x86_64_RPM := x86_64/displaylink-$(VERSION)-$(RELEASE).x86_64.rpm
 SRPM       := displaylink-$(VERSION)-$(RELEASE).src.rpm
 
-TARGETS    := $(RPM) $(SRPM)
+TARGETS    := $(x86_64_RPM) $(SRPM)
 
 # Use release found on GitHub instead of what comes in the
 # Displaylink download
-RPM_GITHUB_EVDI := $(ARCH)/displaylink-$(VERSION)-$(RELEASE)-github_evdi.$(ARCH).rpm
+x86_64_RPM_GITHUB_EVDI := x86_64/displaylink-$(VERSION)-$(RELEASE)-github_evdi.x86_64.rpm
 SRPM_GITHUB_EVDI       := displaylink-$(VERSION)-$(RELEASE)-github_evdi.src.rpm
 
-TARGETS_GITHUB_EVDI := $(RPM_GITHUB_EVDI) $(SRPM_GITHUB_EVDI)
+TARGETS_GITHUB_EVDI := $(x86_64_RPM_GITHUB_EVDI) $(SRPM_GITHUB_EVDI)
 
 #
 # Upstream checks
@@ -76,11 +74,11 @@ all: $(TARGETS)
 # Use evdi tagged release on Github instead of using what is bundled in Displaylink download
 github-release: $(TARGETS_GITHUB_EVDI)
 
-rpm: $(RPM)
+rpm: $(x86_64_RPM)
 
 srpm: $(SRPM_GITHUB_EVDI)
 
-rpm-github: $(RPM_GITHUB_EVDI)
+rpm-github: $(x86_64_RPM_GITHUB_EVDI)
 
 # Pull latest code from main branch
 devel: main
@@ -103,7 +101,7 @@ clean-mainline:
 clean: clean-mainline clean-rawhide
 
 clean-all:
-	rm -rf $(ARCH)/*.rpm displaylink*.src.rpm $(EVDI_PKG) $(EVDI_MAIN)
+	rm -rf x86_64/*.rpm displaylink*.src.rpm $(EVDI_PKG) $(EVDI_MAIN)
 
 # for testing our version construction
 versions:
@@ -125,7 +123,7 @@ $(EVDI_MAIN):
 
 $(DAEMON_PKG):
 	wget --no-verbose -O $(DAEMON_PKG) \
-		"https://www.synaptics.com/sites/default/files/exe_files/2024-05/DisplayLink USB Graphics Software for Ubuntu6.0-EXE.zip"
+		"https://www.synaptics.com/sites/default/files/exe_files/2023-08/DisplayLink USB Graphics Software for Ubuntu5.8-EXE.zip"
 
 $(EVDI_PKG):
 	wget --no-verbose -O v$(VERSION).tar.gz \
@@ -146,14 +144,14 @@ BUILD_DEFINES =                                                     \
 
 BUILD_DEFINES_GITHUB_EVDI = --define "_github 1"
 
-$(RPM): $(BUILD_DEPS)
-	rpmbuild -bb $(BUILD_DEFINES) displaylink.spec --target=$(ARCH)
+$(x86_64_RPM): $(BUILD_DEPS)
+	rpmbuild -bb $(BUILD_DEFINES) displaylink.spec --target=x86_64
 
 $(SRPM): $(BUILD_DEPS)
 	rpmbuild -bs $(BUILD_DEFINES) displaylink.spec
 
-$(RPM_GITHUB_EVDI): $(BUILD_DEPS_GITHUB_EVDI)
-	rpmbuild -bb $(BUILD_DEFINES)$(BUILD_DEFINES_GITHUB_EVDI) displaylink.spec --target=$(ARCH)
+$(x86_64_RPM_GITHUB_EVDI): $(BUILD_DEPS_GITHUB_EVDI)
+	rpmbuild -bb $(BUILD_DEFINES)$(BUILD_DEFINES_GITHUB_EVDI) displaylink.spec --target=x86_64
 
 $(SRPM_GITHUB_EVDI): $(BUILD_DEPS_GITHUB_EVDI)
 	rpmbuild -bs $(BUILD_DEFINES)$(BUILD_DEFINES_GITHUB_EVDI) displaylink.spec
