@@ -81,6 +81,8 @@ srpm: $(SRPM_GITHUB_EVDI)
 
 rpm-github: $(RPM_GITHUB_EVDI)
 
+srpm-github: $(SRPM_GITHUB_EVDI)
+
 # Pull latest code from main branch
 devel: main
 main: $(EVDI_MAIN)
