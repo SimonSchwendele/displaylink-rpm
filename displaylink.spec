@@ -1,5 +1,5 @@
 %{!?_daemon_version:%global _daemon_version 6.0.0-24}
-%{!?_version:%global _version 1.14.6}
+%{!?_version:%global _version 1.14.7}
 %{!?_release:%global _release 1}
 
 # Disable RPATH since DisplayLinkManager contains this.
@@ -234,6 +234,9 @@ done
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+* Wed Sep 25 2024 Crashdummy <crashdummy1337@proton.me> 1.14.7-1
+- Bump evdi to 1.14.7 to support Kernels 6.11 and 6.12 and some ubuntu bugs
+
 * Wed Aug 14 2024 Crashdummy <crashdummy1337@proton.me> 1.14.6-1
 - Bump evdi to 1.14.6 to support Kernels 6.10.4 and 6.11 RCs
 

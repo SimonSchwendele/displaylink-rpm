@@ -19,10 +19,13 @@ jobs:
         - os: fedora
           version: 40
           dockernamespace: quay.io/fedora/fedora
+        - os: fedora
+          version: 41
+          dockernamespace: quay.io/fedora/fedora
 
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Prepare Environment
         run: |
@@ -48,7 +51,7 @@ jobs:
       - run: chown `id -u`:`id -g` -R .
 
       - name: Upload RPM
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}
           path: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}.*.rpm
@@ -65,14 +68,14 @@ jobs:
           overwrite: true
 
       - name: Install copr-cli
-        if: matrix.version > 39
+        if: matrix.version > 40
         run: dnf install copr-cli -y
 
       - name: Add login to copr
-        if: matrix.version > 39
+        if: matrix.version > 40
         run: |
           echo "${{ secrets.COPR_CREDENTIALS }}" >> "./coprConfig"
 
       - name: Upload to COPR
-        if: matrix.version > 39
+        if: matrix.version > 40
         run: copr-cli --config "./coprConfig" build Displaylink ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.src.rpm
