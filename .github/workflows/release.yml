@@ -38,7 +38,7 @@ jobs:
       - name: Install build dependencies
         run: |
           dnf install -y rpm-build make gcc gcc-c++ libdrm-devel systemd-rpm-macros glibc-devel.x86_64 wget git 'dnf-command(builddep)'
-          dnf builddep -y --spec ./displaylink.spec
+          [[ "${{ matrix.version }}" == "41" ]] && dnf builddep -y ./displaylink.spec || dnf builddep -y --spec ./displaylink.spec
 
       - name: Make build
         run: |
