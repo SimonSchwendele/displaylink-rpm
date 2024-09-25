@@ -294,6 +294,9 @@ fi
 * Fri Aug 30 2024 Mrinal Dhillon <mrinaldhillon@gmail.com> 1.14.6-2
 - Add aarch64 support
 
+* Wed Aug 14 2024 Crashdummy <crashdummy1337@proton.me> 1.14.6-1
+- Bump evdi to 1.14.6 to support Kernels 6.10.4 and 6.11 RCs
+
 * Wed Aug 14 2024 Michael L. Young <elgueromexicano@gmail.com> 1.14.6-1
 - Update to use the latest evdi release which fixes build issues on newer kernels
 
