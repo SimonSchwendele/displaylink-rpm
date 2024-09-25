@@ -90,6 +90,8 @@ gzip -dc evdi.tar.gz | tar -xvvf -
 %else
 %setup -q -T -D -a 0
 cd evdi-%{version}
+%endif
+
 sed -i 's/\r//' README.md
 
 %build
@@ -215,6 +217,9 @@ done
 %{_prefix}/src/evdi-%{version}/tests/.kunitconfig
 %{_prefix}/src/evdi-%{version}/tests/evdi_test.c
 %{_prefix}/src/evdi-%{version}/tests/Makefile
+
+# Exclude the tests directory
+%exclude %{_prefix}/src/evdi-%{version}/tests/
 
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/DisplayLinkManager
