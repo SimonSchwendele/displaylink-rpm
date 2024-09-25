@@ -238,6 +238,9 @@ fi
 %{_prefix}/src/evdi-%{version}/tests/test_evdi_vt_switch.c
 
 
+# Exclude the tests directory
+%exclude %{_prefix}/src/evdi-%{version}/tests/
+
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/DisplayLinkManager
 %{_libexecdir}/%{name}/ella-dock-release.spkg
