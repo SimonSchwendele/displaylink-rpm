@@ -283,6 +283,9 @@ fi
 * Fri Aug 30 2024 Mrinal Dhillon <mrinaldhillon@gmail.com> 1.14.6-2
 - Add aarch64 support
 
+* Wed Sep 25 2024 Crashdummy <crashdummy1337@proton.me> 1.14.7-1
+- Bump evdi to 1.14.7 to support Kernels 6.11 and 6.12 and some ubuntu bugs
+
 * Wed Aug 14 2024 Crashdummy <crashdummy1337@proton.me> 1.14.6-1
 - Bump evdi to 1.14.6 to support Kernels 6.10.4 and 6.11 RCs
 
