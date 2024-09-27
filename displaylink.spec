@@ -1,6 +1,6 @@
 %{!?_daemon_version:%global _daemon_version 6.0.0-24}
 %{!?_version:%global _version 1.14.7}
-%{!?_release:%global _release 1}
+%{!?_release:%global _release 2}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -209,10 +209,16 @@ done
 %{_prefix}/src/evdi-%{version}/evdi_sysfs.h
 %{_prefix}/src/evdi-%{version}/tests/.kunitconfig
 %{_prefix}/src/evdi-%{version}/tests/evdi_test.c
+%{_prefix}/src/evdi-%{version}/tests/evdi_test.h
 %{_prefix}/src/evdi-%{version}/tests/Makefile
+%{_prefix}/src/evdi-%{version}/tests/test_evdi_vt_switch.c
+%{_prefix}/src/evdi-%{version}/tests/evdi_fake_compositor.c
+%{_prefix}/src/evdi-%{version}/tests/evdi_fake_compositor.h
+%{_prefix}/src/evdi-%{version}/tests/evdi_fake_user_client.c
+%{_prefix}/src/evdi-%{version}/tests/evdi_fake_user_client.h
 
 # Exclude the tests directory
-%exclude %{_prefix}/src/evdi-%{version}/tests/
+#%exclude %{_prefix}/src/evdi-%{version}/tests/
 
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/DisplayLinkManager
