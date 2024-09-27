@@ -236,9 +236,8 @@ fi
 %{_prefix}/src/evdi-%{version}/tests/evdi_test.h
 %{_prefix}/src/evdi-%{version}/tests/test_evdi_vt_switch.c
 
-
 # Exclude the tests directory
-%exclude %{_prefix}/src/evdi-%{version}/tests/
+#%exclude %{_prefix}/src/evdi-%{version}/tests/
 
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/DisplayLinkManager
