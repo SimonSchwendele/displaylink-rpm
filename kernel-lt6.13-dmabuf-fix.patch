@@ -1,0 +1,48 @@
+From 398f065074448e9f6ed4e87443c1a7250ab16c36 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Spintzyk?= <Lukasz.Spintzyk@synaptics.com>
+Date: Fri, 13 Dec 2024 11:32:32 +0100
+Subject: [PATCH] Fix DMA_BUF import NS on kenrels < 6.13
+
+---
+ module/evdi_gem.c     | 7 ++++---
+ module/evdi_painter.c | 6 +++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/module/evdi_gem.c b/module/evdi_gem.c
+index 78a5ebd..8d82206 100644
+--- a/module/evdi_gem.c
++++ b/module/evdi_gem.c
+@@ -28,10 +28,11 @@
+ #include <drm/drm_cache.h>
+ #include <linux/vmalloc.h>
+ 
+-#if KERNEL_VERSION(5, 16, 0) <= LINUX_VERSION_CODE || defined(EL9)
+-MODULE_IMPORT_NS("DMA_BUF");
+-#elif KERNEL_VERSION(6, 13, 0) <= LINUX_VERSION_CODE
++
++#if KERNEL_VERSION(6, 13, 0) <= LINUX_VERSION_CODE
+ MODULE_IMPORT_NS("DMA_BUF");
++#elif KERNEL_VERSION(5, 16, 0) <= LINUX_VERSION_CODE || defined(EL9)
++MODULE_IMPORT_NS(DMA_BUF);
+ #endif
+ 
+ #if KERNEL_VERSION(5, 11, 0) <= LINUX_VERSION_CODE || defined(EL8)
+diff --git a/module/evdi_painter.c b/module/evdi_painter.c
+index 42f537d..6e1bb8a 100644
+--- a/module/evdi_painter.c
++++ b/module/evdi_painter.c
+@@ -36,10 +36,10 @@
+ #endif
+ 
+ /* Import of DMA_BUF namespace was reverted in EL8 */
+-#if KERNEL_VERSION(5, 16, 0) <= LINUX_VERSION_CODE || defined(EL9)
+-MODULE_IMPORT_NS("DMA_BUF");
+-#elif KERNEL_VERSION(6, 13, 0) <= LINUX_VERSION_CODE
++#if KERNEL_VERSION(6, 13, 0) <= LINUX_VERSION_CODE
+ MODULE_IMPORT_NS("DMA_BUF");
++#elif KERNEL_VERSION(5, 16, 0) <= LINUX_VERSION_CODE || defined(EL9)
++MODULE_IMPORT_NS(DMA_BUF);
+ #endif
+ 
+ #if KERNEL_VERSION(5, 1, 0) <= LINUX_VERSION_CODE || defined(EL8)
+

@@ -5,7 +5,7 @@ diff -uNr evdi-1.14.7-a/module/evdi_gem.c evdi-1.14.7-b/module/evdi_gem.c
  #include <linux/vmalloc.h>
  
  #if KERNEL_VERSION(5, 16, 0) <= LINUX_VERSION_CODE || defined(EL9)
-+MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");
 +#elif KERNEL_VERSION(6, 13, 0) <= LINUX_VERSION_CODE
  MODULE_IMPORT_NS("DMA_BUF");
  #endif
@@ -17,7 +17,7 @@ diff -uNr evdi-1.14.7-a/module/evdi_painter.c evdi-1.14.7-b/module/evdi_painter.
  
  /* Import of DMA_BUF namespace was reverted in EL8 */
  #if KERNEL_VERSION(5, 16, 0) <= LINUX_VERSION_CODE || defined(EL9)
-+MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");
 +#elif KERNEL_VERSION(6, 13, 0) <= LINUX_VERSION_CODE
  MODULE_IMPORT_NS("DMA_BUF");
  #endif

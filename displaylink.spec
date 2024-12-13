@@ -44,6 +44,7 @@ Source9:  evdi.conf
 Patch0:   align-with-linux-v6.11-plus.patch
 Patch1:   el9_5-build-fixes-and-el-audit-updates.patch
 Patch2:   kernel-6.13-string-literal-fix.patch
+Patch3:   kernel-lt6.13-dmabuf-fix.patch
 Patch100: 0001-Patch-for-kernel-6.12.patch
 Patch101: 0001-Fix-build-for-6.14-rc3.patch
 
@@ -95,6 +96,7 @@ cd evdi-%{version}
 %patch -P101 -p1
 %patch -P1 -p1
 %patch -P2 -p1
+%patch -P3 -p1
 
 
 sed -i 's/\r//' README.md
