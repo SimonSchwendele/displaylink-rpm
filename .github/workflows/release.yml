@@ -19,9 +19,6 @@ jobs:
         - os: fedora
           version: 41
           dockernamespace: quay.io/fedora/fedora
-        - os: fedora
-          version: 41
-          dockernamespace: quay.io/fedora/fedora
 
 
     steps:
