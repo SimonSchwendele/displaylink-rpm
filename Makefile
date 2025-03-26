@@ -3,7 +3,7 @@
 #
 
 DAEMON_VERSION := 6.1.0-17
-VERSION        := 1.14.8
+VERSION        := 1.14.9
 RELEASE        := 1
 
 #
@@ -77,7 +77,7 @@ github-release: $(TARGETS_GITHUB_EVDI)
 
 rpm: $(RPM)
 
-srpm: $(x86_64_RPM)
+srpm: $(RPM)
 
 rpm-github: $(RPM_GITHUB_EVDI)
 
