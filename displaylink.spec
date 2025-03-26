@@ -1,6 +1,6 @@
-%{!?_daemon_version:%global _daemon_version 6.1.1-17}
+%{!?_daemon_version:%global _daemon_version 6.1.0-17}
 %{!?_version:%global _version 1.14.9}
-%{!?_release:%global _release 2}
+%{!?_release:%global _release 1}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -83,7 +83,6 @@ mkdir -p evdi-%{version}
 
 %setup -q -T -D -a 0
 cd evdi-%{version}
-
 
 sed -i 's/\r//' README.md
 
@@ -187,7 +186,6 @@ fi
 %dir %{_prefix}/src/evdi-%{version}
 %{_prefix}/src/evdi-%{version}/Kconfig
 %{_prefix}/src/evdi-%{version}/LICENSE
-%{_prefix}/src/evdi-%{version}/README.md
 %{_prefix}/src/evdi-%{version}/Makefile
 %{_prefix}/src/evdi-%{version}/README.md
 %{_prefix}/src/evdi-%{version}/dkms.conf
@@ -226,8 +224,6 @@ fi
 %{_prefix}/src/evdi-%{version}/tests/evdi_test.h
 %{_prefix}/src/evdi-%{version}/tests/test_evdi_vt_switch.c
 
-# Exclude the tests directory
-#%exclude %{_prefix}/src/evdi-%{version}/tests/
 
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/DisplayLinkManager
@@ -249,8 +245,14 @@ fi
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
-* Sun Dec 22 2024 Crashdummy <crashdummy1337@proton.me> 1.14.8-1
-- Bump evdi to 1.14.8
+* Wed Mar 26 2025 Crashdummy <crashdummy1337@proton.me> 1.14.9-1
+- Bump evdi to 1.14.9 to support kernel 6.14
+
+* Wed Feb 26 2025 Michael L. young <elgueromexicano@gmail.com> 1.14.8-1
+- Update to the latest evdi release v1.14.8
+- Add a conflicts for older libevdi installs
+- Add workaround for Gnome/Mutter in postinstall
+- Update patch for evdi tarball included in Displaylink driver download
 
 * Wed Dec 11 2024 Michael L. Young <elgueromexicano@gmail.com> 1.14.7-4
 - Add patches for evdi builds on kernels 6.12 and 6.13-rc4 from upstream
@@ -266,14 +268,8 @@ fi
 * Fri Nov 08 2024 Michael L. Young <elgueromexicano@gmail.com> 1.14.7-1
 - Update to use the latest evdi release from upstream
 
-* Wed Sep 25 2024 Crashdummy <crashdummy1337@proton.me> 1.14.7-1
-- Bump evdi to 1.14.7 to support Kernels 6.11 and 6.12 and some ubuntu bugs
-
 * Fri Aug 30 2024 Mrinal Dhillon <mrinaldhillon@gmail.com> 1.14.6-2
 - Add aarch64 support
-
-* Wed Aug 14 2024 Crashdummy <crashdummy1337@proton.me> 1.14.6-1
-- Bump evdi to 1.14.6 to support Kernels 6.10.4 and 6.11 RCs
 
 * Wed Aug 14 2024 Michael L. Young <elgueromexicano@gmail.com> 1.14.6-1
 - Update to use the latest evdi release which fixes build issues on newer kernels

@@ -2,9 +2,9 @@
 # Versions
 #
 
-DAEMON_VERSION := 6.1.1-17
+DAEMON_VERSION := 6.1.0-17
 VERSION        := 1.14.9
-RELEASE        := 2
+RELEASE        := 1
 
 #
 # Dependencies
@@ -77,7 +77,7 @@ github-release: $(TARGETS_GITHUB_EVDI)
 
 rpm: $(RPM)
 
-srpm: $(x86_64_RPM)
+srpm: $(RPM)
 
 rpm-github: $(RPM_GITHUB_EVDI)
 
