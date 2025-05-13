@@ -2,8 +2,8 @@
 # Versions
 #
 
-DAEMON_VERSION := 6.1.0-17
-VERSION        := 1.14.9
+DAEMON_VERSION := 6.1.1-17
+VERSION        := 1.14.10
 RELEASE        := 1
 
 #
