@@ -43,6 +43,7 @@ jobs:
           else
               dnf install gawk -y
               dnf builddep -y --spec ./displaylink.spec
+          fi
 
       - name: Make build
         run: |
