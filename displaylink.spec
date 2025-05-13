@@ -245,6 +245,21 @@ fi
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+* Tue May 13 2025 Crashdummy <crashdummy1337@proton.me> 1.14.10-1
+- Bump evdi to 1.14.10 with preliminary support for kernel 6.15
+- Build Fedora42 package as well
+
+* Sat Apr 26 2025 Michael L. Young <elgueromexicano@gmail.com> 1.14.9-2
+- Update to new DisplayLink 6.1.1 package
+- Remove old patch since DisplayLink package includes the latest
+  evdi 1.14.9 package
+- Add patch when using the release on Github. Official release has
+  newer updates to evdi which adds support for kernel 6.15. These updates
+  have not made their way back into the repo as of this release.
+
+* Wed Mar 26 2025 Crashdummy <crashdummy1337@proton.me> 1.14.9-1
+- Bump evdi to 1.14.9 to support kernel 6.14
+
 * Wed Mar 26 2025 Crashdummy <crashdummy1337@proton.me> 1.14.9-1
 - Bump evdi to 1.14.9 to support kernel 6.14
 
