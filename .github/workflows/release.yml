@@ -28,6 +28,8 @@ jobs:
 
       - name: Prepare Environment
         run: |
+          [[ ${{ matrix.version }} -gt 40 ]] && dnf5 install gawk -y || dnf install gawk -y
+
           echo "VERSION=$(grep ^VERSION Makefile | awk -F:= '{print $2}' | tr -d ' ')" >> $GITHUB_ENV
           echo "SPECIFICTARGET=github-release" >> $GITHUB_ENV
           echo "RELEASE=$(grep ^RELEASE Makefile | awk -F:= '{print $2}' | tr -d ' ')" >> $GITHUB_ENV
@@ -37,13 +39,7 @@ jobs:
       - name: Install build dependencies
         run: |
           dnf install -y rpm-build make gcc gcc-c++ libdrm-devel systemd-rpm-macros glibc-devel.x86_64 wget git 'dnf-command(builddep)'
-          if [[ ${{ matrix.version }} -gt 40 ]];then
-              dnf5 install gawk -y
-              dnf builddep -y ./displaylink.spec
-          else
-              dnf install gawk -y
-              dnf builddep -y --spec ./displaylink.spec
-          fi
+          [[ ${{ matrix.version }} -gt 40 ]] && dnf builddep -y ./displaylink.spec || dnf builddep -y --spec ./displaylink.spec
 
       - name: Make build
         run: |
