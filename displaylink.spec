@@ -1,5 +1,5 @@
 %{!?_daemon_version:%global _daemon_version 6.2.0-30}
-%{!?_version:%global _version 1.14.13}
+%{!?_version:%global _version 1.14.14}
 %{!?_release:%global _release 1}
 
 # Disable RPATH since DisplayLinkManager contains this.
@@ -247,6 +247,9 @@ fi
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+* Wed Feb 12 2026 Crashdummy <crashdummy1337@proton.me> 1.14.14-1
+- Update evdi to 1.14.14 ( Corre Ultra 7 performance )
+
 * Tue Jan 27 2026 Crashdummy <crashdummy1337@proton.me> 1.14.13-1
 - Update evdi to 1.14.13 ( Bugfix on COre Ultra 7 )
 
