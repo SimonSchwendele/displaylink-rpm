@@ -1,6 +1,6 @@
 %{!?_daemon_version:%global _daemon_version 6.2.0-30}
 %{!?_version:%global _version 1.14.14}
-%{!?_release:%global _release 1}
+%{!?_release:%global _release 2}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -37,6 +37,8 @@ Source6:  95-displaylink.preset
 Source7:  %{name}.logrotate
 Source8:  displaylink-udev-extractor.sh
 Source9:  evdi.conf
+
+Patch0: remove-drm_fb_helper_debug_enter_leave.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  libdrm-devel
@@ -85,6 +87,9 @@ mkdir -p evdi-%{version}
 
 %setup -q -T -D -a 0
 cd evdi-%{version}
+
+# remove-drm_fb_helper_debug_enter_leave.patch -> Kernel 7.0 requirement
+%patch -P 0 -p1
 
 sed -i 's/\r//' README.md
 
@@ -247,6 +252,9 @@ fi
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+* Tue Feb 24 2026 Crashdummy <crashdummy1337@proton.me> 1.14.14-2
+- Add https://github.com/DisplayLink/evdi/pull/558 to enable preliminary support for kernel 7.0
+
 * Wed Feb 12 2026 Crashdummy <crashdummy1337@proton.me> 1.14.14-1
 - Update evdi to 1.14.14 ( Corre Ultra 7 performance )
 
