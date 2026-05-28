@@ -6,7 +6,7 @@ on:
       - published
 
 jobs:
-  buildrpms:
+  buildrpms-x86-64:
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.dockernamespace }}:${{ matrix.version }}
@@ -24,25 +24,19 @@ jobs:
           dockernamespace: quay.io/fedora/fedora
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@main
 
       - name: Prepare Environment
         run: |
-          [[ ${{ matrix.version }} -gt 40 ]] && dnf5 install gawk -y || dnf install gawk -y
-
+          dnf5 install gawk -y
           echo "VERSION=$(grep ^VERSION Makefile | awk -F:= '{print $2}' | tr -d ' ')" >> $GITHUB_ENV
-          echo "SPECIFICTARGET=github-release" >> $GITHUB_ENV
           echo "RELEASE=$(grep ^RELEASE Makefile | awk -F:= '{print $2}' | tr -d ' ')" >> $GITHUB_ENV
           echo "EVDISOURCE=.github_evdi" >> $GITHUB_ENV
-          echo "OSVERSION=${{ matrix.version }}" >> $GITHUB_ENV
 
-      - name: Install build dependencies
+      - name: Build RPMs
         run: |
-          dnf install -y rpm-build make gcc gcc-c++ libdrm-devel systemd-rpm-macros glibc-devel.x86_64 wget git 'dnf-command(builddep)'
-          [[ ${{ matrix.version }} -gt 40 ]] && dnf builddep -y ./displaylink.spec || dnf builddep -y --spec ./displaylink.spec
-
-      - name: Make build
-        run: |
+          dnf5 install -y rpm-build make gcc gcc-c++ libdrm-devel systemd-rpm-macros glibc-devel wget git 'dnf5-command(builddep)'
+          dnf5 builddep -y ./displaylink.spec
           make github-release
 
       - name: Rename files
@@ -52,15 +46,15 @@ jobs:
       - run: chown `id -u`:`id -g` -R .
 
       - name: Upload RPM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}
+          name: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}-x86_64
           path: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}.*.rpm
 
       - name: Upload Assets To Release
         uses: xresloader/upload-to-github-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           file: '${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}.*.rpm'
           draft: false
@@ -80,3 +74,59 @@ jobs:
       - name: Upload to COPR
         if: matrix.version > 43
         run: copr-cli --config "./coprConfig" build Displaylink ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.src.rpm
+
+  buildrpms-arm:
+    needs: buildrpms-x86-64
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: ${{ matrix.dockernamespace }}:${{ matrix.version }}
+    strategy:
+      matrix:
+        include:
+        - os: fedora
+          version: 42
+          dockernamespace: quay.io/fedora/fedora
+        - os: fedora
+          version: 43
+          dockernamespace: quay.io/fedora/fedora
+        - os: fedora
+          version: 44
+          dockernamespace: quay.io/fedora/fedora
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Prepare Environment
+        run: |
+          dnf5 install gawk -y
+          echo "VERSION=$(grep ^VERSION Makefile | awk -F:= '{print $2}' | tr -d ' ')" >> $GITHUB_ENV
+          echo "RELEASE=$(grep ^RELEASE Makefile | awk -F:= '{print $2}' | tr -d ' ')" >> $GITHUB_ENV
+          echo "EVDISOURCE=.github_evdi" >> $GITHUB_ENV
+
+      - name: Build RPMs
+        run: |
+          dnf5 install -y rpm-build make gcc gcc-c++ libdrm-devel systemd-rpm-macros glibc-devel wget git 'dnf5-command(builddep)'
+          dnf5 builddep -y ./displaylink.spec
+          make github-release
+
+      - name: Rename files
+        run : ls -la
+      - run: mv aarch64/displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.aarch64.rpm ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}${{ env.EVDISOURCE }}.aarch64.rpm
+      - run: chown `id -u`:`id -g` -R .
+
+      - name: Upload RPM
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}-aarch64
+          path: ${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}.*.rpm
+
+      - name: Upload Assets To Release
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          file: '${{ matrix.os }}-${{ matrix.version }}-displaylink-${{ env.VERSION }}-${{ env.RELEASE }}.*.rpm'
+          draft: false
+          update_latest_release: true
+          tags: true
+          overwrite: true

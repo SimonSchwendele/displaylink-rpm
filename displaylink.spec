@@ -1,6 +1,6 @@
 %{!?_daemon_version:%global _daemon_version 6.2.0-30}
 %{!?_version:%global _version 1.14.16}
-%{!?_release:%global _release 1}
+%{!?_release:%global _release 2}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -247,6 +247,9 @@ fi
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+
+* Thu May 28 2026 Crashdummy <crashdummy1337@proton.me> 1.14.16-2
+- Rerelease to experimentally support aarch64
 
 * Wed Feb 25 2026 Crashdummy <crashdummy1337@proton.me> 1.14.15-1
 - Update evdi to 1.14.15 ( 7.0 support )
