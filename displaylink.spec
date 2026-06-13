@@ -1,6 +1,6 @@
-%{!?_daemon_version:%global _daemon_version 6.2.0-30}
+%{!?_daemon_version:%global _daemon_version 6.3.0-48}
 %{!?_version:%global _version 1.14.16}
-%{!?_release:%global _release 2}
+%{!?_release:%global _release 3}
 
 # Disable RPATH since DisplayLinkManager contains this.
 # Fedora 35 enforces this check and will stop rpmbuild from
@@ -247,6 +247,12 @@ fi
 %systemd_postun_with_restart displaylink-driver.service
 
 %changelog
+
+* Sat Jun 13 2026 Crashdummy <crashdummy1337@proton.me> 1.14.16-3
+- Update displaylink to v6.3.0 with changelog:
+- Support for Ubuntu 26.04
+- Fixed an issue where disabling one of the DisplayLink screens using xrandr caused multiple screens to go black. (VIFR-7205)
+- DL-7xxx: Fixed an issue causing blank screens after resuming from sleep. (VIFR-7208, VIFR-7254)
 
 * Thu May 28 2026 Crashdummy <crashdummy1337@proton.me> 1.14.16-2
 - Rerelease to experimentally support aarch64
