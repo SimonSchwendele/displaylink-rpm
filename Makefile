@@ -3,7 +3,7 @@
 #
 
 DAEMON_VERSION := 6.3.0-48
-VERSION        := 1.15.0
+VERSION        := 1.15.1
 RELEASE        := 1
 
 #
