@@ -1,0 +1,51 @@
+name: Check for upstream updates
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Compare versions
+        env:
+          NTFY_USER: ${{ secrets.NTFY_USER }}
+          NTFY_URL: ${{ secrets.NTFY_URL }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          current_daemon=$(sed -n 's/^DAEMON_VERSION[[:space:]]*:=[[:space:]]*//p' Makefile)
+          current_evdi=$(sed -n 's/^VERSION[[:space:]]*:=[[:space:]]*//p' Makefile)
+
+          # 6.4.0-22 could be found in their official ubuntu repo. Until they do weird things to the numbering we're good
+          displaylink_repo="https://www.synaptics.com/sites/default/files/Ubuntu/dists/stable/non-free/binary-amd64/Packages"
+          latest_daemon=$(curl -fsSL -A 'Mozilla/5.0' "$displaylink_repo" | awk '/^Package: displaylink-driver$/ {p=1; next} /^Package:/ {p=0} p && /^Version:/ {print $2}' | sort -V | tail -1)
+
+          evdi_repo="https://api.github.com/repos/DisplayLink/evdi/releases/latest"
+          latest_evdi=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" "$evdi_repo" | jq -r '.tag_name' | sed 's/^v//')
+
+          echo "DisplayLink: $current_daemon --> $latest_daemon"
+          echo "evdi: $current_evdi --> $latest_evdi"
+
+          if [[ -z "$latest_daemon" ]] || [[ -z "$latest_evdi" ]]; then
+            echo "::error:: Kurwa"
+            exit 1
+          fi
+
+          newer() { [ "$1" != "$2" ] && [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | tail -1)" = "$2" ]; }
+
+          msg=""
+          if newer "$current_daemon" "$latest_daemon"; then
+            msg+="DisplayLink $current_daemon -> $latest_daemon"
+          fi
+          if newer "$current_evdi" "$latest_evdi"; then
+            msg+="evdi $current_evdi -> $latest_evdi"
+          fi
+
+          [[ -z "$msg" ]] || curl -sS -u ${{ secrets.NTFY_USER }}:'${{ env.NTFY_TOKEN }}' -H "Title: Displaylink update available" -d "$msg" "${{ secrets.NTFY_URL }}/updatetime"
